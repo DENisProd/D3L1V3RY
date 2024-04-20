@@ -67,16 +67,17 @@ async function update(input: UpdateStorageInput): Promise<Store> {
 
 async function getAll (input: GetAllStorageInput): Promise<Store[]> {
     let conditions: any = { };
-    
-    if (input?.region) conditions = { region: { contains: input?.region, mode: "insensitive" } };
-    if (input?.search) conditions = { store_name: { contains: input?.search, mode: "insensitive" } };
+
+    if (input?.region) conditions = { ...conditions, region: { contains: input?.region, mode: "insensitive" } };
+    // if (input?.region) conditions = { region: input?.region };
+    if (input?.search) conditions = { ...conditions, store_name: { contains: input?.search, mode: "insensitive" } };
+    if (input?.type) conditions = { ...conditions, store_type: input?.type }
 
     const storages = await db.store.findMany({
         where: {
             ...conditions,
-            store_type: input?.type || StoreType.STORE,
         },
-        orderBy: { id: "asc" },
+        orderBy: { region: "desc" },
         skip: +(input?.page ? (input?.page - 1) * PAGINATION_COUNT : 0 || 0),
         take: PAGINATION_COUNT,
         include: {

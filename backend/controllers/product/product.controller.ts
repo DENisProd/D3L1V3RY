@@ -11,13 +11,14 @@ async function getAll (req: FastifyRequest<{ Querystring: GetAllProductsInput }>
             return reply.status(400).send({ success: false, message: "Некорректный запрос" });
         }
         const productsCount = await productService.getCount(req.query);
+        // const productsCount = 5;
         return reply.send({ success: true, items: products, count: productsCount });
     } catch (err) {
         console.log(err);
         return reply.status(500).send({ success: false, message: "Ошибка при получении"});
     }
 }
-
+// 10, 82
 export default {
     getAll,
 }

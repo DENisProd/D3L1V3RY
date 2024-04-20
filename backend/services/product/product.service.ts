@@ -21,14 +21,14 @@ async function getAll (input: GetAllProductsInput) {
             }
         }
 
-        if (input?.storeId) {
-            conditions = {
-            ...conditions,
-                product_amount: {
-                    storeId: +input?.storeId
-                }
-            }
-        }
+        // if (input?.storeId) {
+        //     conditions = {
+        //     ...conditions,
+        //         product_amount: {
+        //             storeId: +input?.storeId
+        //         }
+        //     }
+        // }
 
         if (input?.soonExpires) {
             const countDays = new Date();
@@ -50,13 +50,15 @@ async function getAll (input: GetAllProductsInput) {
             orderBy: { expiry_date: "desc" },
             skip: +(input?.page ? (input?.page - 1) * PAGINATION_COUNT : 0 || 0),
             take: PAGINATION_COUNT,
-            include: {
-                product_amount: true
-            }
         })
-        const amounts = await Promise.all(products.map(async (product_amount,...product) => ({ ...product, ...product_amount})))
-        if (!amounts) return [];
-        return amounts;
+        // let response = []
+        // if (input?.storeId) {
+        //     response = products.map( (product_amount,...product) => ({ ...product, ...product_amount[0]}))
+        // } else {
+        //     response = products.map( (product_amount,...product) => product)
+        // }
+        // if (!response) return [];
+        return products;
     } catch (e) {
         console.log(e);
         return [];

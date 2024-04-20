@@ -12,7 +12,7 @@ const createStorage = {
   store_address: Type.String(),
   region: Type.String(),
   coordinates: Type.Optional(coordinatesSchema),
-  type: Type.Enum(StoreType, { default: StoreType.STORE }),
+  type: Type.Optional(Type.Enum(StoreType)),
 }
 
 const createStorageSchema = Type.Object({
@@ -28,7 +28,7 @@ const getAllStorageSchemas = Type.Object({
     ...indexSchema.getAllSchema,
     region: Type.Optional(Type.String()),
     search: Type.Optional(Type.String()),
-    type: Type.Optional(Type.Enum(StoreType, { default: StoreType.STORE })),
+    type: Type.Optional(Type.Enum(StoreType)),
 });
 
 export type GetAllStorageInput = Static<typeof getAllStorageSchemas>;
