@@ -47,19 +47,20 @@ enum FileType {
 }
 
 model Product {
-  id               Int            @id @default(autoincrement())
-  product_name     String
-  product_cost     Float          @default(0)
-  manufacture_date DateTime
-  expiry_date      DateTime
-  sku              Int
-  storeId          Int            
-  store            Store          @relation(fields: [storeId], references: [id], onDelete: Cascade)
+  id                 Int            @id @default(autoincrement())
+  product_name       String
+  product_cost       Float          @default(0)
+  manufacture_date   DateTime
+  expiry_date        DateTime
+  sku                Int
+  storeId            Int            
+  store              Store          @relation(fields: [storeId], references: [id], onDelete: Cascade)
 
-  sales            Sale[]
-  manufacturerId        Int
-  manufacturer          Manufacturer        @relation(fields: [manufacturerId], references: [id], onDelete: Cascade)
-  product_amount   ProductAmount[]
+  sales              Sale[]
+  manufacturerId     Int
+  manufacturer       Manufacturer        @relation(fields: [manufacturerId], references: [id], onDelete: Cascade)
+  product_amount     ProductAmount[]
+  product_delivery   ProductDelivery[]
 }
 
 model Sale {
@@ -87,6 +88,22 @@ model ProductAmount {
   product          Product          @relation(fields: [productId], references: [id], onDelete: Cascade)
   storeId          Int            
   store            Store          @relation(fields: [storeId], references: [id], onDelete: Cascade)
+  amount           Int
+}
+
+model ProductDelivery {
+  id                    Int            @id @default(autoincrement())
+  productId        Int            
+  product          Product          @relation(fields: [productId], references: [id], onDelete: Cascade)
+  storeId          Int            
+  store            Store          @relation(fields: [storeId], references: [id], onDelete: Cascade)
+  amount           Int
+  status           ProductDeliveryStatus @default(IN_PROGRESS)
+}
+
+enum ProductDeliveryStatus {
+  COMPLETE
+  IN_PROGRESS
 }
 
 model Coordinate {
@@ -109,6 +126,7 @@ model Store {
   coordinates      Coordinate?
   products         Product[]
   product_amount   ProductAmount[]
+  product_delivery ProductDelivery[]
 }
 
 enum StoreType {

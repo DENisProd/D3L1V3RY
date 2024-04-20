@@ -26,7 +26,7 @@ async function login(req: FastifyRequest<{ Body: LoginInput }>, reply: FastifyRe
 
 async function check(req: FastifyRequest, reply: FastifyReply) {
     try {
-        await csvService.parse('');
+        // await csvService.parse('');
 
         const user = (req as any).user;
         const userFromDb = await userService.getById(user.userId);
