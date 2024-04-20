@@ -24,7 +24,9 @@ async function getAll (input: GetAllProductsInput) {
         if (input?.storeId) {
             conditions = {
             ...conditions,
-                storeId: +input?.storeId
+                product_amount: {
+                    storeId: +input?.storeId
+                }
             }
         }
 
