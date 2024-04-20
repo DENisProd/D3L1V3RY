@@ -53,18 +53,13 @@ model Product {
   manufacture_date DateTime
   expiry_date      DateTime
   sku              Int
-  sale_date        DateTime?
-  quantity_sold    Int
-  product_amount   Float          @default(0)
-  product_measure  String
-  product_volume   Float
-  manufacturer     String
-
   storeId          Int            
   store            Store          @relation(fields: [storeId], references: [id], onDelete: Cascade)
 
   sales            Sale[]
-  manufacturer_     Manufacturer?
+  manufacturerId        Int
+  manufacturer          Manufacturer        @relation(fields: [manufacturerId], references: [id], onDelete: Cascade)
+  product_amount   ProductAmount[]
 }
 
 model Sale {
@@ -80,11 +75,18 @@ model Sale {
 }
 
 model Manufacturer {
-  id               Int            @id @default(autoincrement())
-  manufacturer     String
+  id                    Int            @id @default(autoincrement())
+  manufacturer_name     String
+  manufacturer_address  String
+  product          Product[]
+}
 
-  productId        Int            @unique 
-  product          Product        @relation(fields: [productId], references: [id], onDelete: Cascade)
+model ProductAmount {
+  id                    Int            @id @default(autoincrement())
+  productId        Int            
+  product          Product          @relation(fields: [productId], references: [id], onDelete: Cascade)
+  storeId          Int            
+  store            Store          @relation(fields: [storeId], references: [id], onDelete: Cascade)
 }
 
 model Coordinate {
@@ -106,6 +108,7 @@ model Store {
   store_type       StoreType      @default(STORE) 
   coordinates      Coordinate?
   products         Product[]
+  product_amount   ProductAmount[]
 }
 
 enum StoreType {

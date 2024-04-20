@@ -21,7 +21,7 @@ interface IProductLoad {
     Product_Amount: number;
     Product_Measure: string;
     Product_Volume: number;
-    Manufacturer: number;
+    Manufacturer: string;
 }
 
 async function parse (_path: string) {
@@ -52,7 +52,7 @@ async function parse (_path: string) {
     console.log(products);
     // const pLimitModule = await import('p-limit');
     // const pLimit = pLimitModule.default;
-    const limit = pLimit(50);
+    const limit = pLimit(100);
     await Promise.all(products.map(async (product, index) => {
         await limit(async () => {
             if (index === 0) return;
@@ -79,6 +79,19 @@ async function parse (_path: string) {
                     }
                 });
             }
+            let manufacturer = await db.manufacturer.findFirst({
+                where: {
+                    manufacturer_name: product.Manufacturer
+                }
+            })
+            if (!manufacturer) {
+                manufacturer = await db.manufacturer.create({
+                    data: {
+                        manufacturer_name: product.Manufacturer,
+                        manufacturer_address: "Ул. Рандомная 14",
+                    }
+                });
+            }
 
             const newProduct = await db.product.create({
                 data: {
@@ -88,14 +101,18 @@ async function parse (_path: string) {
                     manufacture_date: new Date(product.Manufacture_Date),
                     expiry_date: new Date(product.Expiry_Date),
                     sku: +product.SKU,
-                    sale_date: new Date(product.Sale_Date),
-                    quantity_sold: +product.Quantity_Sold,
-                    product_amount: product.Product_Amount,
-                    product_measure: product.Product_Measure,
-                    product_volume: product.Product_Volume,
-                    manufacturer: product.Manufacture_Date
+                    manufacturerId: manufacturer.id
                 }
             });
+            const newSale = await db.sale.create({
+                data: {
+                    sale_date: new Date(product.Sale_Date),
+                    quantity_sold: +product.Quantity_Sold,
+                    productId: +newProduct.id,
+                    product_measure: product.Product_Measure,
+                    product_volume: product.Product_Volume,
+                }
+            })
             console.log(newProduct);
         });
     }));

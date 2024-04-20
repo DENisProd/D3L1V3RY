@@ -19,7 +19,7 @@ const getSalesSchema = Type.Object({
 })
 
 export type CreateSaleInput = Static<typeof createSaleSchema>;
-export type GetAllSalesUnput = Static<typeof getSalesSchema>;
+export type GetAllSalesInput = Static<typeof getSalesSchema>;
 
 export default {
     createSaleSchema,
