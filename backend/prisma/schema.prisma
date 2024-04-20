@@ -1,0 +1,91 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           Int            @id @default(autoincrement())
+  createdAt    DateTime       @default(now())
+  email        String         @unique
+  gender       GenderType?
+  password     String
+  name         String         @default("")
+  birthday     DateTime?    
+  blocked      Boolean        @default(false)
+  role         UserRole     @default(DEFAULT)
+}
+
+enum GenderType {
+  MALE
+  FEMALE
+}
+
+enum UserRole {
+  DEFAULT
+  ADMIN
+}
+
+model File {
+  id               Int            @id @default(autoincrement())
+  url              String
+  size             Int            @default(1)
+  type             FileType
+  isPublic         Boolean        @default(false)
+}
+
+enum FileType {
+  PHOTO
+  VIDEO
+  DOCUMENT
+}
+
+model Product {
+  id               Int            @id @default(autoincrement())
+  product_name     String
+  product_cost     Float          @default(0)
+  manufacture_date DateTime
+  expiry_date      DateTime
+  sku              Int
+  sale_date        DateTime?
+  quantity_sold    Int
+  product_amount   Float          @default(0)
+  product_measure  String
+  product_volume   Float
+  manufacturer     String
+
+  storeId          Int            
+  store            Store          @relation(fields: [storeId], references: [id], onDelete: Cascade)
+}
+
+model Coordinate {
+  id               Int            @id @default(autoincrement())
+  lon              Float          @default(0)
+  lat              Float          @default(0)
+  storeId          Int            
+  store            Store          @relation(fields: [storeId], references: [id], onDelete: Cascade)
+}
+
+// lon: 39.71715376386022,
+// lat: 47.282980074452155
+
+model Store {
+  id               Int            @id @default(autoincrement())
+  store_name       String
+  store_address    String
+  region           String
+  store_type       StoreType      @default(STORE) 
+  coordinates      Coordinate[]
+  products         Product[]
+}
+
+enum StoreType {
+  SHOP
+  STORE
+}
