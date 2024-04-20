@@ -53,8 +53,6 @@ model Product {
   manufacture_date   DateTime
   expiry_date        DateTime
   sku                Int
-  storeId            Int            
-  store              Store          @relation(fields: [storeId], references: [id], onDelete: Cascade)
 
   sales              Sale[]
   manufacturerId     Int
@@ -73,6 +71,8 @@ model Sale {
 
   productId        Int            
   product          Product          @relation(fields: [productId], references: [id], onDelete: Cascade)
+  storeId            Int            
+  store              Store          @relation(fields: [storeId], references: [id], onDelete: Cascade)
 }
 
 model Manufacturer {
@@ -83,7 +83,7 @@ model Manufacturer {
 }
 
 model ProductAmount {
-  id                    Int            @id @default(autoincrement())
+  id               Int            @id @default(autoincrement())
   productId        Int            
   product          Product          @relation(fields: [productId], references: [id], onDelete: Cascade)
   storeId          Int            
@@ -104,6 +104,7 @@ model ProductDelivery {
 enum ProductDeliveryStatus {
   COMPLETE
   IN_PROGRESS
+  ORDER
 }
 
 model Coordinate {
@@ -124,7 +125,7 @@ model Store {
   region           String
   store_type       StoreType      @default(STORE) 
   coordinates      Coordinate?
-  products         Product[]
+  sales            Sale[]
   product_amount   ProductAmount[]
   product_delivery ProductDelivery[]
 }
@@ -132,4 +133,18 @@ model Store {
 enum StoreType {
   SHOP
   STORE
+}
+
+model DistanceMatrix {
+  id               Int            @id @default(autoincrement())
+  storeId1         Int
+  storeId2         Int
+  distance         Int
+}
+
+model TimeMatrix {
+  id               Int            @id @default(autoincrement())
+  storeId1         Int
+  storeId2         Int
+  time             Int
 }

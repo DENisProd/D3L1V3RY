@@ -56,15 +56,24 @@ async function parse (_path: string) {
     await Promise.all(products.map(async (product, index) => {
         await limit(async () => {
             if (index === 0) return;
+            let inDB = false;
+            let _product = null;
+            // if (product.Product_Name) {
+            //     _product = await db.product.findFirst({
+            //         where: {
+            //             product_name: product.Product_Name,
+            //             sku: +product.SKU,
+            //         }
+            //     });
+            //     if (_product) inDB = true;
+            // }
             if (product.ID) {
-                const _product = await db.product.findUnique({
+                _product = await db.product.findFirst({
                     where: {
-                        id: +product.ID
+                        id: product.ID
                     }
                 });
-                if (_product) return;
             }
-            
             let store = await db.store.findFirst({
                 where: {
                     store_name: product.Store_Name
@@ -93,27 +102,29 @@ async function parse (_path: string) {
                 });
             }
 
-            const newProduct = await db.product.create({
-                data: {
-                    storeId: store.id,
-                    product_name: product.Product_Name,
-                    product_cost: +product.Product_Cost,
-                    manufacture_date: new Date(product.Manufacture_Date),
-                    expiry_date: new Date(product.Expiry_Date),
-                    sku: +product.SKU,
-                    manufacturerId: manufacturer.id
-                }
-            });
+            if (!inDB) {
+                _product = await db.product.create({
+                    data: {
+                        product_name: product.Product_Name,
+                        product_cost: +product.Product_Cost,
+                        manufacture_date: new Date(product.Manufacture_Date),
+                        expiry_date: new Date(product.Expiry_Date),
+                        sku: +product.SKU,
+                        manufacturerId: manufacturer.id
+                    }
+                });
+            }
             const newSale = await db.sale.create({
                 data: {
                     sale_date: new Date(product.Sale_Date),
                     quantity_sold: +product.Quantity_Sold,
-                    productId: +newProduct.id,
+                    productId: +_product.id,
                     product_measure: product.Product_Measure,
                     product_volume: product.Product_Volume,
+                    storeId: store.id,
                 }
             })
-            console.log(newProduct);
+            console.log(_product);
         });
     }));
     console.log("done");

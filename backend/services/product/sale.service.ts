@@ -17,6 +17,7 @@ async function create (input: CreateSaleInput) {
             product_measure: input?.product_measure || 'шт.',
             product_volume: input?.product_volume,
             productId: input?.productId,
+            storeId: input?.storeId,
         }
     });
     return sale;

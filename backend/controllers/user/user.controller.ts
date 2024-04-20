@@ -4,8 +4,6 @@ import userService from "../../services/user/user.service";
 import tokenService from "../../services/token.service";
 import { LoginInput, RegInput } from "../../routes/user/auth/auth.schema";
 
-import csvService from "../../services/csv.service";
-
 async function login(req: FastifyRequest<{ Body: LoginInput }>, reply: FastifyReply) {
     try {
         const data = req.body;
@@ -26,8 +24,6 @@ async function login(req: FastifyRequest<{ Body: LoginInput }>, reply: FastifyRe
 
 async function check(req: FastifyRequest, reply: FastifyReply) {
     try {
-        // await csvService.parse('');
-
         const user = (req as any).user;
         const userFromDb = await userService.getById(user.userId);
         return reply.send({ success: !!userFromDb, role: userFromDb?.role, id: userFromDb.id });

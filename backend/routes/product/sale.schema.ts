@@ -8,6 +8,7 @@ const sale = {
   product_measure: Type.String(),
   product_volume: Type.Number(),
   productId: Type.Number(),
+  storeId: Type.Number(),
 }
 
 const createSaleSchema = Type.Object({

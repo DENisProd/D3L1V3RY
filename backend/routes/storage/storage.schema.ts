@@ -28,7 +28,7 @@ const getAllStorageSchemas = Type.Object({
     ...indexSchema.getAllSchema,
     region: Type.Optional(Type.String()),
     search: Type.Optional(Type.String()),
-    type: Type.Enum(StoreType, { default: StoreType.STORE }),
+    type: Type.Optional(Type.Enum(StoreType, { default: StoreType.STORE })),
 });
 
 export type GetAllStorageInput = Static<typeof getAllStorageSchemas>;
