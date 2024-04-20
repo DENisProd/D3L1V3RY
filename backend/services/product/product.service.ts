@@ -47,7 +47,10 @@ async function getAll (input: GetAllProductsInput) {
             },
             orderBy: { expiry_date: "desc" },
             skip: +(input?.page ? (input?.page - 1) * PAGINATION_COUNT : 0 || 0),
-            take: PAGINATION_COUNT
+            take: PAGINATION_COUNT,
+            include: {
+                product_amount: true,
+            }
         })
         return products;
     } catch (e) {
