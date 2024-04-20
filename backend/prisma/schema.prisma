@@ -62,13 +62,36 @@ model Product {
 
   storeId          Int            
   store            Store          @relation(fields: [storeId], references: [id], onDelete: Cascade)
+
+  sales            Sale[]
+  manufacturer_     Manufacturer?
+}
+
+model Sale {
+  id               Int            @id @default(autoincrement())
+  sale_date        DateTime?
+  quantity_sold    Int            
+  product_amount   Float          @default(0)
+  product_measure  String
+  product_volume   Float
+
+  productId        Int            
+  product          Product          @relation(fields: [productId], references: [id], onDelete: Cascade)
+}
+
+model Manufacturer {
+  id               Int            @id @default(autoincrement())
+  manufacturer     String
+
+  productId        Int            @unique 
+  product          Product        @relation(fields: [productId], references: [id], onDelete: Cascade)
 }
 
 model Coordinate {
   id               Int            @id @default(autoincrement())
   lon              Float          @default(0)
   lat              Float          @default(0)
-  storeId          Int            
+  storeId          Int            @unique       
   store            Store          @relation(fields: [storeId], references: [id], onDelete: Cascade)
 }
 
@@ -81,7 +104,7 @@ model Store {
   store_address    String
   region           String
   store_type       StoreType      @default(STORE) 
-  coordinates      Coordinate[]
+  coordinates      Coordinate?
   products         Product[]
 }
 

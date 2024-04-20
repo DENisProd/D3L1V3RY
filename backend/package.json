@@ -12,7 +12,8 @@
     "build": "tsc -p tsconfig.json",
     "db:migrate": "prisma migrate dev --name init",
     "docker:up": "docker-compose up -d --build",
-    "deploy": "git pull&& yarn && yarn db:migrate && pm2 restart server && pm2 monit"
+    "deploy": "git pull&& yarn && yarn db:migrate && pm2 restart hack && pm2 monit",
+    "deploy:init": "pm2 start 'npm run dev' --name hack && pm2 monit"
   },
   "dependencies": {
     "@esm2cjs/p-limit": "^4.0.0",

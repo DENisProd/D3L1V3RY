@@ -1,6 +1,6 @@
 import storageController from "../../controllers/storage/storage.controller";
 import { isAuthenticated } from "../../plugins/authenticate.middleware";
-import { createStorageSchema, getAllStorageSchemas } from "./storage.schema";
+import { createStorageSchema, getAllStorageSchemas, updateStorageSchema } from "./storage.schema";
 
 export default async function storageRoutes(fastify: any) {
     fastify.post("/", {
@@ -11,6 +11,14 @@ export default async function storageRoutes(fastify: any) {
         preHandler: isAuthenticated,
         handler: storageController.create,
     });
+    fastify.put("/", {
+        schema: {
+            tags: ["Склады и точки продажи"],
+            body: updateStorageSchema
+        },
+        preHandler: isAuthenticated,
+        handler: storageController.update,
+    });
 
     fastify.get("/all", {
         schema: {
@@ -19,5 +27,13 @@ export default async function storageRoutes(fastify: any) {
         },
         preHandler: isAuthenticated,
         handler: storageController.getAll,
+    });
+
+    fastify.get("/:id", {
+        schema: {
+            tags: ["Склады и точки продажи"],
+        },
+        preHandler: isAuthenticated,
+        handler: storageController.getById,
     });
 }
