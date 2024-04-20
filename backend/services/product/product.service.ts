@@ -49,10 +49,12 @@ async function getAll (input: GetAllProductsInput) {
             skip: +(input?.page ? (input?.page - 1) * PAGINATION_COUNT : 0 || 0),
             take: PAGINATION_COUNT,
             include: {
-                product_amount: true,
+                product_amount: true
             }
         })
-        return products;
+        const amounts = await Promise.all(products.map(async (product_amount,...product) => ({ ...product, ...product_amount})))
+        if (!amounts) return [];
+        return amounts;
     } catch (e) {
         console.log(e);
         return [];
