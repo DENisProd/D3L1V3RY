@@ -40,6 +40,7 @@ async function getAll (req: FastifyRequest<{ Querystring: GetAllStorageInput }>,
         if (!storages) {
             return reply.status(400).send({ success: false, message: "Ошибка при создании" });
         }
+
         return reply.send({ success: true, items: storages });
     } catch (err) {
         console.log(err);

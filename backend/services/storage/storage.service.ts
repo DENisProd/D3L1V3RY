@@ -78,7 +78,10 @@ async function getAll (input: GetAllStorageInput): Promise<Store[]> {
         },
         orderBy: { id: "asc" },
         skip: +(input?.page ? (input?.page - 1) * PAGINATION_COUNT : 0 || 0),
-        take: PAGINATION_COUNT
+        take: PAGINATION_COUNT,
+        include: {
+            coordinates: true
+        }
     })
     return storages;
 }
@@ -86,6 +89,9 @@ async function getAll (input: GetAllStorageInput): Promise<Store[]> {
 async function getById (id: number): Promise<Store> {
     return await db.store.findUnique({
         where: { id: +id },
+        include: {
+            coordinates: true
+        }
     })
 }
 

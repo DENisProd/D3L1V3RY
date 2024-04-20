@@ -8,7 +8,7 @@ async function create (req: FastifyRequest<{ Body: CreateSaleInput }>, reply: Fa
         // TODO: check role
         const sale = await saleService.create(req.body);
         if (!sale) {
-            return reply.status(500).send({ success: false, message: "Ошибка при создании" });
+            return reply.status(400).send({ success: false, message: "Ошибка при создании" });
         }
         return reply.send({ success: !!sale });
     } catch (err) {
@@ -25,7 +25,8 @@ async function getAll (req: FastifyRequest<{ Querystring: GetAllSalesInput }>, r
         if (!sales) {
             return reply.status(500).send({ success: false, message: "Ошибка при получении" });
         }
-        return reply.send({ success: true, items: sales });
+        const productsCount = await saleService.getCount(req.query);
+        return reply.send({ success: true, items: sales, count: productsCount });
     } catch (err) {
         console.log(err);
         return reply.status(500).send({ success: false, message: "Ошибка при получении"});

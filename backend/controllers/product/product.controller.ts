@@ -10,7 +10,8 @@ async function getAll (req: FastifyRequest<{ Querystring: GetAllProductsInput }>
         if (!products) {
             return reply.status(400).send({ success: false, message: "Некорректный запрос" });
         }
-        return reply.send({ success: true, data: products });
+        const productsCount = await productService.getCount(req.query);
+        return reply.send({ success: true, items: products, count: productsCount });
     } catch (err) {
         console.log(err);
         return reply.status(500).send({ success: false, message: "Ошибка при получении"});

@@ -37,7 +37,19 @@ async function getAll (input: GetAllSalesInput) {
     return sales;
 }
 
+async function getCount (input: GetAllSalesInput) {
+    let conditions: any = { };
+
+    const sales = await db.sale.count({
+        where: {
+            ...conditions,
+        },
+    })
+    return sales;
+}
+
 export default {
     create,
     getAll,
+    getCount,
 }

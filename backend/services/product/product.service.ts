@@ -56,6 +56,55 @@ async function getAll (input: GetAllProductsInput) {
     }
 }
 
+async function getCount (input: GetAllProductsInput) {
+    try {
+        let conditions: any = { };
+        if (input?.status) {
+            let _status = input.status as ProductDeliveryStatus;
+            console.log(_status)
+            if (_status === ProductDeliveryStatus.COMPLETE || _status === ProductDeliveryStatus.IN_PROGRESS) {
+                conditions = {
+                    ...conditions,
+                    product_delivery: {
+                        status: _status
+                    }
+                }
+            }
+        }
+
+        if (input?.storeId) {
+            conditions = {
+            ...conditions,
+                storeId: +input?.storeId
+            }
+        }
+
+        if (input?.soonExpires) {
+            const countDays = new Date();
+            countDays.setDate(countDays.getDate() + DAYS_TO_EXPIRES);
+
+            conditions = {
+                ...conditions,
+                AND: [
+                    { expiry_date: { lt: countDays }},
+                    { expiry_date: { gt: new Date() }},
+                ]
+            }
+        }
+
+        const products = await db.product.count({
+            where: {
+                ...conditions,
+            },
+        })
+        return products;
+    } catch (e) {
+        console.log(e);
+        return 0;
+    }
+}
+
 export default {
     getAll,
+    getCount,
 }
