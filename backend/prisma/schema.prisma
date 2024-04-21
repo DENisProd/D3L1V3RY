@@ -98,7 +98,22 @@ model ProductDelivery {
   storeId          Int            
   store            Store          @relation(fields: [storeId], references: [id], onDelete: Cascade)
   amount           Int
+  weight           Int
   status           ProductDeliveryStatus @default(IN_PROGRESS)
+}
+
+model Car {
+  id                    Int            @id @default(autoincrement())
+  type                  CarTypes
+  capacity              Int
+  number                String         @unique
+  model                 String
+}
+
+enum CarTypes {
+  SMALL
+  MIDDLE
+  HEAVY
 }
 
 enum ProductDeliveryStatus {
@@ -128,6 +143,11 @@ model Store {
   sales            Sale[]
   product_amount   ProductAmount[]
   product_delivery ProductDelivery[]
+}
+
+model Region {
+  id               Int            @id @default(autoincrement())
+  name             String
 }
 
 enum StoreType {
