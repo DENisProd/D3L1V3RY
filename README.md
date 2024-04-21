@@ -20,3 +20,9 @@ FRONTEND REPO: https://github.com/akiminrbru/hach24
 Список товаров
 ![image](https://github.com/DENisProd/D3L1V3RY/assets/63392847/53b75fd8-bd27-4b73-adde-243a6a6a8150)
 
+
+Попытка прогнозов на 10 дней, используя первые 1000 элементов
+![image](https://github.com/DENisProd/D3L1V3RY/assets/63392847/d6281139-5b8f-4815-98fe-47ee60590ae6)
+
+![image](https://github.com/DENisProd/D3L1V3RY/assets/63392847/e5327f05-b9a5-410c-9bd6-84b24f302e17)
+
