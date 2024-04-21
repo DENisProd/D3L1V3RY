@@ -6,6 +6,7 @@ import salesRoutes from "./product/sale.routes";
 import manufacturerRoutes from "./product/manufacturer.routes";
 import productRoutes from "./product/product.routes";
 import csvRoutes from "./csv/csv.routes";
+import productAmountRoutes from "./product_amount/product_amount.routes";
 
 
 export default function setupRoutes(fastify: FastifyInstance) {
@@ -20,5 +21,6 @@ export default function setupRoutes(fastify: FastifyInstance) {
     fastify.register(salesRoutes, { logLevel: "debug", prefix: "/api/sale" })
     fastify.register(manufacturerRoutes, { logLevel: "debug", prefix: "/api/manufacturer" })
     fastify.register(productRoutes, { logLevel: "debug", prefix: "/api/product" })
+    fastify.register(productAmountRoutes, { logLevel: "debug", prefix: "/api/amount" })
     fastify.register(csvRoutes, { logLevel: "debug", prefix: "/api/csv" })
 }
